@@ -56,16 +56,15 @@ public class MapFragment extends Fragment {
 
 
         map = view.findViewById(R.id.map);
-        mapController = map.getController();
 
-        map.setTileSource(TileSourceFactory.HIKEBIKEMAP);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
         map.setMinZoomLevel(3);
 
+        mapController = map.getController();
+
         mapController.setZoom(16);
         GeoPoint startPoint = new GeoPoint(49.40, 18.625);
-        mapController.setCenter(startPoint);
 
         txtwZoom = view.findViewById(R.id.txtwZoom);
         String zoom = String.valueOf(map.getZoomLevel());
@@ -106,4 +105,9 @@ public class MapFragment extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        map.setTileSource(TileSourceFactory.HIKEBIKEMAP);
+    }
 }

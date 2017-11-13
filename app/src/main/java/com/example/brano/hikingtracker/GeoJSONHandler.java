@@ -24,14 +24,16 @@ public class GeoJSONHandler {
         EXECUTOR.execute(r);
     }
 
-    public byte[] getFileContent(File file)
-            throws IOException {
-        RandomAccessFile raf = new RandomAccessFile(file, "r");
-        raf.seek(0);
-        byte[] buffer = new byte[(int) raf.length()];
-        raf.read(buffer);
-        raf.close();
-        return buffer;
+    public byte[] getFileContent(File file) throws IOException {
+        synchronized (GeoJSONHandler.lock) {
+            RandomAccessFile raf = new RandomAccessFile(file, "r");
+            raf.seek(0);
+            byte[] buffer = new byte[(int) raf.length()];
+            raf.read(buffer);
+            raf.close();
+            return buffer;
+        }
+
     }
 
 
