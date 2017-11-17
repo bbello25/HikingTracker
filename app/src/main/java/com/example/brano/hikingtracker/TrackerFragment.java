@@ -3,12 +3,14 @@ package com.example.brano.hikingtracker;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -16,27 +18,35 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.prefs.PreferenceChangeEvent;
 
 public class TrackerFragment extends Fragment {
 
     String TAG = TrackerFragment.class.getSimpleName();
+    private static final int REQUEST_LOCATION_PERMISSION_CODE = 1234;
 
     public LocationService locationService;
     private View view;
     private Context context;
     private Activity activity;
-    private Button btnStartLogging;
-    private Button btnStopLogging;
     private SharedPreferences preferences;
     SharedPreferences.Editor editor;
+
+    Session session;
+
+    private Button btnStartLogging;
+    private Button btnStopLogging;
+    private Button btnAllTracks;
+    private EditText edttCurrentSessionName;
+    private TextView txtwStatus;
 
     public TrackerFragment() {
     }
@@ -50,9 +60,23 @@ public class TrackerFragment extends Fragment {
         context = view.getContext();
         activity = this.getActivity();
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        if (!Session.isSessionStarted()) {
+            Session.createSession(context);
+        }
+        session = Session.getInstance();
 
+
+        edttCurrentSessionName = view.findViewById(R.id.edttSessionName);
         btnStartLogging = view.findViewById(R.id.btnStartLogging);
         btnStopLogging = view.findViewById(R.id.btnStopLogging);
+        btnAllTracks = view.findViewById(R.id.btnAllTracks);
+        txtwStatus = view.findViewById(R.id.txtwStatus);
+
+        if (session.getLoggingStatus()) {
+            edttCurrentSessionName.setText(session.getSessionName());
+            txtwStatus.setText("Running");
+            txtwStatus.setTextColor(Color.GREEN);
+        }
 
         //for future use
         editor = preferences.edit();
@@ -62,13 +86,27 @@ public class TrackerFragment extends Fragment {
         btnStartLogging.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                connectToLoacationService();
+
+                if (TextUtils.isEmpty(edttCurrentSessionName.getText())) {
+                    Toast.makeText(context, "Enter session name please.", Toast.LENGTH_LONG).show();
+                } else {
+                    session.setSessionName(edttCurrentSessionName.getText().toString());
+                    txtwStatus.setText("Running");
+                    txtwStatus.setTextColor(Color.GREEN);
+                    session.setLoggingStatus(true);
+                    connectToLoacationService();
+                }
+
+
             }
         });
 
         btnStopLogging.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                txtwStatus.setText("Stopped");
+                txtwStatus.setTextColor(Color.RED);
+                session.setLoggingStatus(false);
                 stopLocationService();
             }
         });
@@ -101,7 +139,7 @@ public class TrackerFragment extends Fragment {
 
             ActivityCompat.requestPermissions(activity,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    Constants.REQUEST_LOCATION_PERMISSION_CODE);
+                    REQUEST_LOCATION_PERMISSION_CODE);
         } else {
             if (preferences.getBoolean("needBound", false)) {
                 bindToLocationService();
@@ -116,7 +154,7 @@ public class TrackerFragment extends Fragment {
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
-            case Constants.REQUEST_LOCATION_PERMISSION_CODE: {
+            case REQUEST_LOCATION_PERMISSION_CODE: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Log.d(TAG, "Location permission was granted");

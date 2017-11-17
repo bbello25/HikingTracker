@@ -12,21 +12,98 @@
         android:id="@+id/btnStartLogging"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:text="@string/strat_logging"
         app:layout_constraintBottom_toTopOf="@+id/btnStopLogging"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/edttSessionName" />
 
     <Button
         android:id="@+id/btnStopLogging"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:text="@string/stop_logging"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnAllTracks"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnStartLogging" />
+
+
+    <Button
+        android:id="@+id/btnAllTracks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="All sessions"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnStopLogging" />
+
+    <TextView
+        android:id="@+id/txtWSessionLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.146"
+        tools:text="Session" />
+
+    <EditText
+        android:id="@+id/edttSessionName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:hint="Enter session name"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/btnStartLogging"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/txtWSessionLabel"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtwStatusLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="8dp"
+        android:text="Status"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/txtWSessionLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.222" />
+
+    <TextView
+        android:id="@+id/txtwStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Stopped"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/edttSessionName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.295"
+        app:layout_constraintStart_toEndOf="@+id/txtwStatusLabel"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.266" />
 </android.support.constraint.ConstraintLayout>
