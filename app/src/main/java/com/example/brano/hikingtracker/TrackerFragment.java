@@ -17,6 +17,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -93,7 +94,7 @@ public class TrackerFragment extends Fragment {
                     session.setSessionName(edttCurrentSessionName.getText().toString());
                     txtwStatus.setText("Running");
                     txtwStatus.setTextColor(Color.GREEN);
-                    session.setLoggingStatus(true);
+
                     connectToLoacationService();
                 }
 
@@ -106,10 +107,23 @@ public class TrackerFragment extends Fragment {
             public void onClick(View v) {
                 txtwStatus.setText("Stopped");
                 txtwStatus.setTextColor(Color.RED);
-                session.setLoggingStatus(false);
+
                 stopLocationService();
             }
         });
+
+        btnAllTracks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlllTracksFragment allTracksFragment = new AlllTracksFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.mainLayout, allTracksFragment, allTracksFragment.getTag())
+                        .commit();
+
+            }
+        });
+
         return view;
     }
 

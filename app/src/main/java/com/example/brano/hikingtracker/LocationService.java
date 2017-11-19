@@ -28,6 +28,7 @@ public class LocationService extends Service implements LocationListener, GpsSta
     String filename;
     File file;
     GeoJSONHandler geoJSONHandler;
+    Session session;
 
     private final LocationServiceBinder binder = new LocationServiceBinder();
 
@@ -75,6 +76,10 @@ public class LocationService extends Service implements LocationListener, GpsSta
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if (!Session.isSessionStarted()) {
+            Session.createSession(getApplicationContext());
+        }
+        session = Session.getInstance();
         handleIntent(intent);
         return START_STICKY;
     }
@@ -107,12 +112,14 @@ public class LocationService extends Service implements LocationListener, GpsSta
             Log.e(LOG_TAG, "Could not start LocationService in foreground. ", e);
         }
 
-        filename = "test123.geojson";
+
+        filename = session.getSessionName() + ".geojson";
         file = new File(getApplicationContext().getFilesDir(), filename);
         geoJSONHandler = new GeoJSONHandler(file);
 
         showNotification();
         startUpdatingLocation();
+        session.setLoggingStatus(true);
     }
 
     private void stopLogging() {
@@ -120,8 +127,12 @@ public class LocationService extends Service implements LocationListener, GpsSta
             stopForeground(true);
             locationManager.removeUpdates(this);
             locationManager.removeGpsStatusListener(this);
+
+            GeoJSONHandler newe = new GeoJSONHandler(getApplicationContext());
+            newe.getAllTracks();
             Log.i(LOG_TAG, new String(geoJSONHandler.getFileContent(file)));
             removeNotification();
+            session.setLoggingStatus(false);
         } catch (IOException e) {
             e.printStackTrace();
         }
