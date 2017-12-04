@@ -124,9 +124,12 @@ public class LocationService extends Service implements LocationListener, GpsSta
 
     private void stopLogging() {
         try {
-            stopForeground(true);
-            locationManager.removeUpdates(this);
-            locationManager.removeGpsStatusListener(this);
+            if (locationManager != null) {
+                locationManager.removeUpdates(this);
+                locationManager.removeGpsStatusListener(this);
+                stopForeground(true);
+            }
+
 
             GeoJSONHandler newe = new GeoJSONHandler(getApplicationContext());
             newe.getAllTracks();

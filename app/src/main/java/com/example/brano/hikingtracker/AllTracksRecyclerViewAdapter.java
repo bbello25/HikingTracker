@@ -21,10 +21,10 @@ import java.util.List;
 
 public class AllTracksRecyclerViewAdapter extends RecyclerView.Adapter<AllTracksRecyclerViewAdapter.ViewHolder> {
 
-    private final LinkedHashMap<String, FeatureCollection> mValues;
+    private final List<String> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public AllTracksRecyclerViewAdapter(LinkedHashMap<String, FeatureCollection> items, OnListFragmentInteractionListener listener) {
+    public AllTracksRecyclerViewAdapter(List<String> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -39,8 +39,9 @@ public class AllTracksRecyclerViewAdapter extends RecyclerView.Adapter<AllTracks
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
 
-        holder.mItem = getElementByIndex(mValues, position);
-        holder.mContentView.setText(getKeyOnPosition(mValues, position));
+        holder.mItem = mValues.get(position);
+
+        holder.mContentView.setText(holder.mItem);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,8 +51,7 @@ public class AllTracksRecyclerViewAdapter extends RecyclerView.Adapter<AllTracks
 
                 TrackDetailFragment trackDetailFragment = new TrackDetailFragment();
                 Bundle data = new Bundle();
-                data.putString("name", (String) holder.mContentView.getText());
-                data.putString("geojson", holder.mItem.toJson());
+                data.putString("name", (String) holder.mContentView.getText() + ".geojson");
                 trackDetailFragment.setArguments(data);
                 FragmentManager fragmentManager = activity.getSupportFragmentManager();
                 fragmentManager.beginTransaction()
@@ -86,7 +86,7 @@ public class AllTracksRecyclerViewAdapter extends RecyclerView.Adapter<AllTracks
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mContentView;
-        public FeatureCollection mItem;
+        public String mItem;
 
         public ViewHolder(View view) {
             super(view);

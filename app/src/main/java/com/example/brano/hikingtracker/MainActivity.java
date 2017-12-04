@@ -12,8 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.mapbox.services.commons.geojson.FeatureCollection;
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         AlllTracksFragment.OnListFragmentInteractionListener {
@@ -73,6 +71,7 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -109,7 +108,7 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
-    public void onListFragmentInteraction(FeatureCollection item) {
+    public void onListFragmentInteraction(String item) {
 
     }
 }

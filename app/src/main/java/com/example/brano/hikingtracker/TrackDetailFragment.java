@@ -13,11 +13,14 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.services.commons.geojson.FeatureCollection;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,6 +28,7 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 
@@ -37,6 +41,7 @@ public class TrackDetailFragment extends Fragment {
     JSONObject trackData;
     JSONArray features;
     Double trackDistance = 0.0;
+    List<PointHolder> points;
     private View view;
 
     public TrackDetailFragment() {
@@ -55,6 +60,17 @@ public class TrackDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_track_detail, container, false);
+        Button buttonSend = view.findViewById(R.id.btnShownOnMap);
+        buttonSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MapFragment mapFragment = new MapFragment();
+                TrackDetailFragment trackDetailFragment = new TrackDetailFragment();
+                Bundle data = new Bundle();
+                //todo dorobit
+                // /data.putDoubleArray();
+            }
+        });
 
         new getTrackInfo().execute(data);
 
@@ -68,8 +84,12 @@ public class TrackDetailFragment extends Fragment {
         protected Track doInBackground(Bundle... bundles) {
             Track track = new Track();
             try {
+                GeoJSONHandler geoJSONHandler = new GeoJSONHandler(getActivity().getApplicationContext());
+
                 track.name = bundles[0].getString("name", null);
-                trackData = new JSONObject(bundles[0].getString("geojson", null));
+                File file = new File(getActivity().getFilesDir(), track.name);
+
+                trackData = new JSONObject(new String(geoJSONHandler.getFileContent(file)));
                 features = trackData.getJSONArray("features");
 
                 PointHolder pointHolder;
@@ -88,7 +108,7 @@ public class TrackDetailFragment extends Fragment {
                     pointHolder.latLng = new LatLng(coords.getDouble(1), coords.getDouble(0), Double.parseDouble(properties.get("altitude").toString()));
                     track.points.add(pointHolder);
                 }
-            } catch (JSONException | ParseException e) {
+            } catch (JSONException | ParseException | IOException e) {
                 e.printStackTrace();
             }
 
@@ -119,7 +139,9 @@ public class TrackDetailFragment extends Fragment {
 
         @Override
         protected Bundle doInBackground(Track... tracks) {
-            List<PointHolder> points = tracks[0].points;
+            points = tracks[0].points;
+            if (points.size() <= 0)
+                return null;
             Double distance = 0.0;
             Date start = points.get(0).date;
             Date end = points.get(points.size() - 1).date;

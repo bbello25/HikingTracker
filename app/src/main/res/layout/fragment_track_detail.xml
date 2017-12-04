@@ -1,0 +1,141 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.brano.hikingtracker.TrackDetailFragment">
+
+
+    <TextView
+        android:id="@+id/txtwEndLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="End"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnShownOnMap"
+        app:layout_constraintEnd_toStartOf="@+id/txtwName"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtwStartLabel" />
+
+    <TextView
+        android:id="@+id/txtwEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="TextView"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnShownOnMap"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/txtwNameLabel"
+        app:layout_constraintTop_toBottomOf="@+id/txtwStart" />
+
+    <TextView
+        android:id="@+id/txtwStartLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/txtwEndLabel"
+        app:layout_constraintEnd_toStartOf="@+id/txtwName"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtwAvgSpeedLabel" />
+
+    <TextView
+        android:id="@+id/txtwStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/txtwEnd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/txtwNameLabel"
+        app:layout_constraintTop_toBottomOf="@+id/txtwAvgSpeed" />
+
+    <TextView
+        android:id="@+id/txtwAvgSpeedLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Avg. speed"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/txtwStartLabel"
+        app:layout_constraintEnd_toStartOf="@+id/txtwName"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtwDistanceLabel" />
+
+    <TextView
+        android:id="@+id/txtwAvgSpeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/txtwStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/txtwNameLabel"
+        app:layout_constraintTop_toBottomOf="@+id/txtwDistance" />
+
+    <TextView
+        android:id="@+id/txtwDistanceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Distance"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/txtwAvgSpeedLabel"
+        app:layout_constraintEnd_toStartOf="@+id/txtwName"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtwNameLabel" />
+
+    <TextView
+        android:id="@+id/txtwDistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/txtwAvgSpeed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/txtwNameLabel"
+        app:layout_constraintTop_toBottomOf="@+id/txtwName" />
+
+    <TextView
+        android:id="@+id/txtwNameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/txtwDistanceLabel"
+        app:layout_constraintEnd_toStartOf="@+id/txtwName"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtwName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/txtwDistance"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/txtwNameLabel"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnShownOnMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="56dp"
+        android:text="Show on map"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</android.support.constraint.ConstraintLayout>

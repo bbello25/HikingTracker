@@ -63,9 +63,26 @@ public class GeoJSONHandler {
             }
         }
 
-
         return tracks;
     }
 
+
+
+    public List<String> getTrackList() {
+
+        List<String> trackNames = new ArrayList<>();
+
+        File tracksDir = context.getFilesDir();
+        File[] files = tracksDir.listFiles();
+        for (File file : files) {
+            String filename = file.getName();
+            if (filename.indexOf(".") > 0) {
+                filename = filename.substring(0, filename.lastIndexOf("."));
+            }
+            trackNames.add(filename);
+        }
+
+        return trackNames;
+    }
 
 }

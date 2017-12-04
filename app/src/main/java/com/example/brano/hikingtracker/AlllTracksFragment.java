@@ -10,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.mapbox.services.commons.geojson.FeatureCollection;
-
 /**
  * A fragment representing a list of Items.
  * <p/>
@@ -53,7 +51,7 @@ public class AlllTracksFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new AllTracksRecyclerViewAdapter(geoJSONHandler.getAllTracks(), mListener));
+            recyclerView.setAdapter(new AllTracksRecyclerViewAdapter(geoJSONHandler.getTrackList(), mListener));
         }
         return view;
     }
@@ -88,6 +86,6 @@ public class AlllTracksFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(FeatureCollection item);
+        void onListFragmentInteraction(String item);
     }
 }
