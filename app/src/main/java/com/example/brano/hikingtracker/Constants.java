@@ -7,6 +7,6 @@ public final class Constants {
 
     public static final int NOTIFICATION_ID = 123654;
 
-    public static final int REQUEST_LOCATION_PERMISSION_CODE = 1234;
+    public static final int UPLOAD_TRACkS_JOB_ID = 1;
 
 }

@@ -9,5 +9,5 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context="com.example.brano.hikingtracker.AlllTracksFragment"
+    tools:context="com.example.brano.hikingtracker.Fragments.AlllTracksFragment"
     tools:listitem="@layout/track_item" />

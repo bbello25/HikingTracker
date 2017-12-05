@@ -1,9 +1,8 @@
-package com.example.brano.hikingtracker;
+package com.example.brano.hikingtracker.Fragments;
 
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +27,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.brano.hikingtracker.Constants;
+import com.example.brano.hikingtracker.LocationService;
+import com.example.brano.hikingtracker.R;
+import com.example.brano.hikingtracker.Session;
 
 public class TrackerFragment extends Fragment {
 
@@ -66,7 +70,6 @@ public class TrackerFragment extends Fragment {
         }
         session = Session.getInstance();
 
-
         edttCurrentSessionName = view.findViewById(R.id.edttSessionName);
         btnStartLogging = view.findViewById(R.id.btnStartLogging);
         btnStopLogging = view.findViewById(R.id.btnStopLogging);
@@ -94,7 +97,6 @@ public class TrackerFragment extends Fragment {
                     session.setSessionName(edttCurrentSessionName.getText().toString());
                     txtwStatus.setText("Running");
                     txtwStatus.setTextColor(Color.GREEN);
-
                     connectToLoacationService();
                 }
 
@@ -107,7 +109,6 @@ public class TrackerFragment extends Fragment {
             public void onClick(View v) {
                 txtwStatus.setText("Stopped");
                 txtwStatus.setTextColor(Color.RED);
-
                 stopLocationService();
             }
         });
@@ -133,7 +134,6 @@ public class TrackerFragment extends Fragment {
 
             if (name.endsWith("LocationService")) {
                 locationService = ((LocationService.LocationServiceBinder) service).getService();
-
                 locationService.startUpdatingLocation();
             }
         }
@@ -158,7 +158,7 @@ public class TrackerFragment extends Fragment {
             if (preferences.getBoolean("needBound", false)) {
                 bindToLocationService();
             } else {
-                startLoactionService();
+                startLocationService();
             }
         }
 
@@ -175,7 +175,7 @@ public class TrackerFragment extends Fragment {
                     if (preferences.getBoolean("needBound", false)) {
                         bindToLocationService();
                     } else {
-                        startLoactionService();
+                        startLocationService();
                     }
                 } else {
                     //Not work ... why?
@@ -194,7 +194,7 @@ public class TrackerFragment extends Fragment {
         activity.bindService(serviceStart, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
-    private void startLoactionService() {
+    private void startLocationService() {
         Toast.makeText(context, "Starting location service.", Toast.LENGTH_LONG).show();
         Log.i(TAG, "Starting location service.");
         Intent startIntent = new Intent(activity, LocationService.class);

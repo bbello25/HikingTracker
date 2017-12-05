@@ -4,7 +4,7 @@ package com.example.brano.hikingtracker;
 import java.util.ArrayList;
 import java.util.List;
 
-class Track {
+public class Track {
     public String name;
     public List<PointHolder> points;
 

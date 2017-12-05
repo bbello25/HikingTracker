@@ -1,4 +1,4 @@
-package com.example.brano.hikingtracker;
+package com.example.brano.hikingtracker.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,6 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.brano.hikingtracker.AllTracksRecyclerViewAdapter;
+import com.example.brano.hikingtracker.GeoJSONHandler;
+import com.example.brano.hikingtracker.R;
 
 /**
  * A fragment representing a list of Items.

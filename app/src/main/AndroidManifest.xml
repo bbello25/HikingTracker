@@ -32,6 +32,15 @@
             android:name=".LocationService"
             android:enabled="true"
             android:exported="false" />
+
+        <service
+            android:name=".uploadJobScheduler.UploadTracksJobService"
+            android:label="Word service"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service android:name=".uploadJobScheduler.UploadSchedulerService"
+            android:enabled="true"
+            android:exported="false"
+            />
     </application>
 
 </manifest>

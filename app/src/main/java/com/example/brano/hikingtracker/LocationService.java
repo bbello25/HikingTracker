@@ -108,38 +108,30 @@ public class LocationService extends Service implements LocationListener, GpsSta
     private void startLogging() {
         try {
             startForeground(Constants.NOTIFICATION_ID, new Notification());
+            filename = session.getSessionName() + ".geojson";
+            file = new File(session.getUserFileDir(), filename);
+            geoJSONHandler = new GeoJSONHandler(file);
+
+            showNotification();
+            startUpdatingLocation();
+            session.setLoggingStatus(true);
+
         } catch (Exception e) {
             Log.e(LOG_TAG, "Could not start LocationService in foreground. ", e);
         }
 
 
-        filename = session.getSessionName() + ".geojson";
-        file = new File(getApplicationContext().getFilesDir(), filename);
-        geoJSONHandler = new GeoJSONHandler(file);
-
-        showNotification();
-        startUpdatingLocation();
-        session.setLoggingStatus(true);
     }
 
     private void stopLogging() {
-        try {
-            if (locationManager != null) {
-                locationManager.removeUpdates(this);
-                locationManager.removeGpsStatusListener(this);
-                stopForeground(true);
-            }
-
-
-            GeoJSONHandler newe = new GeoJSONHandler(getApplicationContext());
-            newe.getAllTracks();
-            Log.i(LOG_TAG, new String(geoJSONHandler.getFileContent(file)));
-            removeNotification();
-            session.setLoggingStatus(false);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (locationManager != null) {
+            locationManager.removeUpdates(this);
+            locationManager.removeGpsStatusListener(this);
+            stopForeground(true);
         }
 
+        removeNotification();
+        session.setLoggingStatus(false);
     }
 
     //todo implement notfication channel
@@ -182,12 +174,14 @@ public class LocationService extends Service implements LocationListener, GpsSta
     public void onDestroy() {
         Log.d(LOG_TAG, "onDestroy.");
         super.onDestroy();
+        session.setLoggingStatus(false);
     }
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         Log.d(LOG_TAG, "onTaskRemoved.");
         super.onTaskRemoved(rootIntent);
+        session.setLoggingStatus(false);
     }
 
     @Override

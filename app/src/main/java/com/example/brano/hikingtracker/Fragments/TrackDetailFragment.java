@@ -1,19 +1,22 @@
-package com.example.brano.hikingtracker;
+package com.example.brano.hikingtracker.Fragments;
 
 
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.brano.hikingtracker.GeoJSONHandler;
+import com.example.brano.hikingtracker.PointHolder;
+import com.example.brano.hikingtracker.R;
+import com.example.brano.hikingtracker.Session;
+import com.example.brano.hikingtracker.Track;
 import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.services.commons.geojson.FeatureCollection;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,15 +24,10 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -40,9 +38,9 @@ public class TrackDetailFragment extends Fragment {
     Bundle data;
     JSONObject trackData;
     JSONArray features;
-    Double trackDistance = 0.0;
     List<PointHolder> points;
     private View view;
+    private Session session;
 
     public TrackDetailFragment() {
         // Required empty public constructor
@@ -51,15 +49,19 @@ public class TrackDetailFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         data = getArguments();
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_track_detail, container, false);
+
+        if (!Session.isSessionStarted()) {
+            Session.createSession(view.getContext());
+        }
+        session = Session.getInstance();
+
         Button buttonSend = view.findViewById(R.id.btnShownOnMap);
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +89,7 @@ public class TrackDetailFragment extends Fragment {
                 GeoJSONHandler geoJSONHandler = new GeoJSONHandler(getActivity().getApplicationContext());
 
                 track.name = bundles[0].getString("name", null);
-                File file = new File(getActivity().getFilesDir(), track.name);
+                File file = new File(session.getUserFileDir(), track.name);
 
                 trackData = new JSONObject(new String(geoJSONHandler.getFileContent(file)));
                 features = trackData.getJSONArray("features");
@@ -102,10 +104,13 @@ public class TrackDetailFragment extends Fragment {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM d HH:mm:ss z yyyy");
                     pointHolder.date = dateFormat.parse((String) properties.get("time"));
                     pointHolder.provider = String.valueOf(properties.get("provider"));
-                    pointHolder.accurracy = Double.parseDouble(properties.get("altitude").toString());
+                    pointHolder.accurracy = Double.parseDouble(properties.get("accuracy").toString());
 
                     JSONArray coords = geometry.getJSONArray("coordinates");
-                    pointHolder.latLng = new LatLng(coords.getDouble(1), coords.getDouble(0), Double.parseDouble(properties.get("altitude").toString()));
+                    pointHolder.latLng = new LatLng(coords.getDouble(1), coords.getDouble(0));
+                    if (properties.has("altitude")) {
+                        pointHolder.latLng.setAltitude(Double.parseDouble(properties.get("altitude").toString()));
+                    }
                     track.points.add(pointHolder);
                 }
             } catch (JSONException | ParseException | IOException e) {
@@ -120,7 +125,6 @@ public class TrackDetailFragment extends Fragment {
         protected void onPostExecute(Track track) {
             super.onPostExecute(track);
 
-            new getTrackDetails().execute(track);
 
             TextView txtwName = view.findViewById(R.id.txtwName);
             TextView txtwDistance = view.findViewById(R.id.txtwDistance);
@@ -130,6 +134,7 @@ public class TrackDetailFragment extends Fragment {
             Button showOnMap = view.findViewById(R.id.btnShownOnMap);
 
             txtwName.setText(track.name);
+            new getTrackDetails().execute(track);
 
         }
     }

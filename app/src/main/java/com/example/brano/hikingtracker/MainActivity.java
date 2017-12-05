@@ -1,6 +1,11 @@
 package com.example.brano.hikingtracker;
 
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
@@ -11,6 +16,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.example.brano.hikingtracker.Fragments.AlllTracksFragment;
+import com.example.brano.hikingtracker.Fragments.InfoFragment;
+import com.example.brano.hikingtracker.Fragments.MapFragment;
+import com.example.brano.hikingtracker.Fragments.TrackerFragment;
+import com.example.brano.hikingtracker.uploadJobScheduler.UploadTracksJobService;
+
+import static com.example.brano.hikingtracker.Constants.UPLOAD_TRACkS_JOB_ID;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -37,6 +50,19 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //new UploadTracksTask(this).execute();
+        //todo callt this after logging stop
+        JobScheduler jobScheduler = (JobScheduler) this.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+        if (jobScheduler != null) {
+            jobScheduler.schedule(new JobInfo.Builder(UPLOAD_TRACkS_JOB_ID,
+                    new ComponentName(this, UploadTracksJobService.class))
+                    .setRequiredNetworkType(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+                            ? JobInfo.NETWORK_TYPE_NOT_ROAMING
+                            : JobInfo.NETWORK_TYPE_ANY)
+                    .build());
+        }
+
     }
 
     @Override

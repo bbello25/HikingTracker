@@ -19,6 +19,9 @@ import java.util.concurrent.TimeUnit;
 
 
 public class GeoJSONHandler {
+
+    Session session;
+
     final static Object lock = new Object();
     private final static ThreadPoolExecutor EXECUTOR = new ThreadPoolExecutor(1, 1, 60, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(128));
     private File file = null;
@@ -30,6 +33,10 @@ public class GeoJSONHandler {
 
     public GeoJSONHandler(Context ctx) {
         context = ctx;
+        if (!Session.isSessionStarted()) {
+            Session.createSession(ctx);
+        }
+        session = Session.getInstance();
     }
 
     public void logIntoFile(String description, Location location) {
@@ -67,19 +74,19 @@ public class GeoJSONHandler {
     }
 
 
-
     public List<String> getTrackList() {
 
         List<String> trackNames = new ArrayList<>();
-
-        File tracksDir = context.getFilesDir();
+        File tracksDir = new File(session.getUserFileDir());
         File[] files = tracksDir.listFiles();
-        for (File file : files) {
-            String filename = file.getName();
-            if (filename.indexOf(".") > 0) {
-                filename = filename.substring(0, filename.lastIndexOf("."));
+        if (files != null) {
+            for (File file : files) {
+                String filename = file.getName();
+                if (filename.indexOf(".") > 0) {
+                    filename = filename.substring(0, filename.lastIndexOf("."));
+                }
+                trackNames.add(filename);
             }
-            trackNames.add(filename);
         }
 
         return trackNames;
